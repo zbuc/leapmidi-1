@@ -19,8 +19,15 @@ typedef unsigned short midi_note_value;
 
 typedef unsigned short midi_bodypart_index;
     
-    const int MSG_NOTE = 0;
-    const int MSG_CONTROL = 1;
+/*const int MSG_NOTE_ON = 0x90;
+const int MSG_NOTE_OFF = 0x80;
+const int MSG_CONTROL = 0xB0;*/
+    const int MSG_NOTE_ON = 1;
+    const int MSG_NOTE_OFF = 2;
+    const int MSG_CONTROL = 3;
+    
+const int NOTE_ON = MSG_NOTE_ON;
+const int NOTE_OFF = MSG_NOTE_OFF;
 
 // MIDI control number offsets
 enum midi_control_index {
@@ -110,14 +117,20 @@ enum midi_note_index {
     
         FINGER_1_HAND_1_Z_ON,
         FINGER_1_HAND_1_Z_OFF,
-    /*
-        FINGER_2_HAND_1_X,
-        FINGER_2_HAND_1_Y,
-        FINGER_2_HAND_1_Z,
+
+        FINGER_2_HAND_1_X_ON,
+        FINGER_2_HAND_1_X_OFF,
+    
+        FINGER_2_HAND_1_Y_ON,
+        FINGER_2_HAND_1_Y_OFF,
+    
+        FINGER_2_HAND_1_Z_ON,
         
-        FINGER_1_HAND_2_X,
-        FINGER_1_HAND_2_Y,
-        FINGER_1_HAND_2_Z,*/
+        FINGER_1_HAND_2_X_ON,
+        FINGER_1_HAND_2_X_OFF,
+
+        FINGER_1_HAND_2_Y_ON,
+        FINGER_1_HAND_2_Z_ON,
         
         // etc...
     };

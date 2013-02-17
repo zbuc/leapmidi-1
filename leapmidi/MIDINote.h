@@ -17,8 +17,8 @@
 #include "MIDIBase.h"
 
 namespace leapmidi {
-    
-    class Note : public virtual MIDIBase {
+
+class Note : public virtual MIDIBase {
     public:
         // create a recognized note with raw input value from recognizer
         Note(midi_bodypart_index handIndex, midi_bodypart_index fingerIndex, midi_note_value_raw rawValue);
@@ -34,14 +34,17 @@ namespace leapmidi {
         virtual const midi_note_value_raw maxRawValue() = 0;
         
         // MIDI note code index
-        virtual const midi_note_index noteIndex() = 0;
-        
+        virtual const midi_note_index noteIndexOn() = 0;
+        virtual const midi_note_index noteIndexOff() = 0;
+    
+        int note_state = NOTE_OFF;
+    
     protected:
         midi_note_value_raw _rawValue;
-    };
-    
-    typedef std::shared_ptr<Note> NotePtr;
-    
+};
+
+typedef std::shared_ptr<Note> NotePtr;
+
 } // namespace leapmidi
 
 

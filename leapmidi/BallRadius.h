@@ -27,7 +27,9 @@ public:
     virtual const midi_control_value_raw minRawValue() { return 48; }
     virtual const midi_control_value_raw maxRawValue() { return 145; }
     virtual const midi_control_index controlIndex();
-    virtual const midi_note_index noteIndex();
+
+    virtual const midi_note_index noteIndexOn();
+    virtual const midi_note_index noteIndexOff();
 };
 
 typedef shared_ptr<BallRadius> BallRadiusPtr;

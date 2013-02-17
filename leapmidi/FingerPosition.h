@@ -30,7 +30,8 @@ public:
     
     virtual const midi_note_index noteIndexBase() = 0;
     
-    virtual const midi_note_index noteIndex();
+    virtual const midi_note_index noteIndexOn();
+    virtual const midi_note_index noteIndexOff();
 
 };
     

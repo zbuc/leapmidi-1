@@ -13,7 +13,8 @@
 #include "MIDITypes.h"
 
 namespace leapmidi {
-    class MIDIBase {
+
+class MIDIBase {
     public:
         // create a recognized note with raw input value from recognizer
         virtual const char *description() = 0;
@@ -23,8 +24,8 @@ namespace leapmidi {
         
     protected:
         midi_bodypart_index _handIndex, _fingerIndex;
+};
 
-    };
 }
 
 #endif /* defined(__leapmidi__MIDIBase__) */

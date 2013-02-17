@@ -44,9 +44,11 @@ void FingerGesture::recognizedControls(const Leap::Controller &controller, std::
             velY += pointable.tipVelocity().y;
             velZ += pointable.tipVelocity().z;
         }
+
         x /= pointableCount;
         y /= pointableCount;
         z /= pointableCount;
+
         velX /= pointableCount;
         velY /= pointableCount;
         velZ /= pointableCount;
@@ -78,70 +80,117 @@ void FingerGesture::recognizedControls(const Leap::Controller &controller, std::
     return;
 }
     
-    void FingerGesture::recognizedNotes(const Leap::Controller &controller, std::vector<NotePtr> &notes) {
-        Leap::Frame frame = controller.frame();
+void FingerGesture::recognizedNotes(const Leap::Controller &controller, std::vector<NotePtr> &notes) {
+    Leap::Frame frame = controller.frame();
+    
+    // hands detected?
+    if (frame.hands().empty())
+        return;
+    
+    int active_note = NULL;
+    size_t handCount = frame.hands().count();
+    for (int i = 0; i < handCount; i++) {
+        // gonna assume the user only has two hands. sometimes leap thinks otherwise.
+        if (i > 1) break;
         
-        // hands detected?
-        if (frame.hands().empty())
-            return;
+        Leap::Hand hand = frame.hands()[i];
         
-        size_t handCount = frame.hands().count();
-        for (int i = 0; i < handCount; i++) {
-            // gonna assume the user only has two hands. sometimes leap thinks otherwise.
-            if (i > 1) break;
+        // we need at least one pointable to make this work
+        size_t pointableCount = hand.pointables().count();
+        if (! pointableCount)
+            continue;
+        
+        // calculate average X/Y/Z coords
+        double x=0, y=0, z=0;
+        double velX=0, velY=0, velZ=0;
+        for (int pointableIndex = 0; pointableIndex < pointableCount; pointableIndex++) {
+            Leap::Pointable pointable = hand.pointables()[pointableIndex];
             
-            Leap::Hand hand = frame.hands()[i];
+            x += pointable.tipPosition().x;
+            y += pointable.tipPosition().y;
+            z += pointable.tipPosition().z;
             
-            // we need at least one pointable to make this work
-            size_t pointableCount = hand.pointables().count();
-            if (! pointableCount)
-                continue;
+            velX += pointable.tipVelocity().x;
+            velY += pointable.tipVelocity().y;
+            velZ += pointable.tipVelocity().z;
+        }
+
+        x /= pointableCount;
+        y /= pointableCount;
+        z /= pointableCount;
+
+        velX /= pointableCount;
+        velY /= pointableCount;
+        velZ /= pointableCount;
+        
+        // only register if velocity is greater than this threshold
+        double velocityThreshold = 8.0; // mm/s
+        //                std::cout << "velX: " << velX << " velY: " << velY << " velZ: " << velZ << std::endl;
+        
+        // generate one pointable position control per hand coordinate, determined by number of pointables
+        if (abs(velX) > velocityThreshold) {
+            // if it's not already enabled, enable the note
+            // (might want to optimize logic around here)
             
-            // calculate average X/Y/Z coords
-            double x=0, y=0, z=0;
-            double velX=0, velY=0, velZ=0;
-            for (int pointableIndex = 0; pointableIndex < pointableCount; pointableIndex++) {
-                Leap::Pointable pointable = hand.pointables()[pointableIndex];
-                
-                x += pointable.tipPosition().x;
-                y += pointable.tipPosition().y;
-                z += pointable.tipPosition().z;
-                
-                velX += pointable.tipVelocity().x;
-                velY += pointable.tipVelocity().y;
-                velZ += pointable.tipVelocity().z;
+            // enable the note
+            shared_ptr<FingerPositionX> posX = make_shared<FingerPositionX>(handCount, pointableCount, x);
+            FingerPositionPtr pointablePosControlX = dynamic_pointer_cast<FingerPosition>(posX);
+            pointablePosControlX->note_state = NOTE_ON;
+            
+            bool already_active = false;
+            int i = 0;
+            for (i = 0; i < activeNotes.size(); i++) {
+                if (activeNotes.at(i) == posX->noteIndexOn()) {
+                    // it's active
+                    already_active = true;
+                }
             }
-            x /= pointableCount;
-            y /= pointableCount;
-            z /= pointableCount;
-            velX /= pointableCount;
-            velY /= pointableCount;
-            velZ /= pointableCount;
             
-            // only register if velocity is greater than this threshold
-            double velocityThreshold = 8.0; // mm/s
-            //                std::cout << "velX: " << velX << " velY: " << velY << " velZ: " << velZ << std::endl;
-            
-            // generate one pointable position control per hand coordinate, determined by number of pointables
-            if (abs(velX) > velocityThreshold) {
-                shared_ptr<FingerPositionX> posX = make_shared<FingerPositionX>(handCount, pointableCount, x);
-                FingerPositionPtr pointablePosControlX = dynamic_pointer_cast<FingerPosition>(posX);
+            if (!already_active) {
                 notes.push_back(pointablePosControlX);
+                activeNotes.push_back(posX->noteIndexOn());
+                active_note = posX->noteIndexOn();
             }
+        } else {
+            // disable the note
+            shared_ptr<FingerPositionX> posX = make_shared<FingerPositionX>(handCount, pointableCount, x);
+            FingerPositionPtr pointablePosControlX = dynamic_pointer_cast<FingerPosition>(posX);
+            pointablePosControlX->note_state = NOTE_OFF;
+            notes.push_back(pointablePosControlX);
             
-            /*if (abs(velY) > velocityThreshold) {
-             LeapMIDI::Control::FingerPosition *pointablePosControlY = new LeapMIDI::Control::FingerPositionY(handCount, pointableCount, y);
-             controls.push_back(pointablePosControlY);
-             }
-             
-             if (abs(velZ) > velocityThreshold) {
-             LeapMIDI::Control::FingerPosition *pointablePosControlZ = new LeapMIDI::Control::FingerPositionZ(handCount, pointableCount, z);
-             controls.push_back(pointablePosControlZ);
-             }*/
+            int i = 0;
+            for (i = 0; i < activeNotes.size(); i++) {
+                if (activeNotes.at(i) == posX->noteIndexOn()) {
+                    activeNotes.erase(activeNotes.begin() + i);
+                }
+            }
         }
         
-        return;
-    }
+        // iterate all other notes that were on previously and disable them if no longer active(finger went away)
+        int j = 0;
+        for (j = 0; j < activeNotes.size(); j++) {
+            if (activeNotes.at(j) != active_note) {
+                activeNotes.erase(activeNotes.begin() + j);
+                shared_ptr<FingerPositionX> posX = make_shared<FingerPositionX>(handCount, pointableCount, x);
+                FingerPositionPtr pointablePosControlX = dynamic_pointer_cast<FingerPosition>(posX);
+                pointablePosControlX->note_state = NOTE_OFF;
+                notes.push_back(pointablePosControlX);
+            }
+        }
 
+        
+        /*if (abs(velY) > velocityThreshold) {
+         LeapMIDI::Control::FingerPosition *pointablePosControlY = new LeapMIDI::Control::FingerPositionY(handCount, pointableCount, y);
+         controls.push_back(pointablePosControlY);
+         }
+         
+         if (abs(velZ) > velocityThreshold) {
+         LeapMIDI::Control::FingerPosition *pointablePosControlZ = new LeapMIDI::Control::FingerPositionZ(handCount, pointableCount, z);
+         controls.push_back(pointablePosControlZ);
+         }*/
+    }
     
+    return;
+}
+
 } // namespace leapmidi

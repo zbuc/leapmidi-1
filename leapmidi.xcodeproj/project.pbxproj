@@ -44,7 +44,6 @@
 		C3BF4B7516D053C40091DE62 /* LeapMIDI.h in Headers */ = {isa = PBXBuildFile; fileRef = C3BF4B7416D053C40091DE62 /* LeapMIDI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C3BF4B7816D053D90091DE62 /* MIDITypes.h in Headers */ = {isa = PBXBuildFile; fileRef = C3BF4B7716D053D90091DE62 /* MIDITypes.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		C3C2E7B5167D45650031B430 /* FingerPositionX.h in Headers */ = {isa = PBXBuildFile; fileRef = C3C2E7B2167D45650031B430 /* FingerPositionX.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		C3C2E7B8167D49460031B430 /* FingerPositionY.h in Headers */ = {isa = PBXBuildFile; fileRef = C3C2E7B7167D49460031B430 /* FingerPositionY.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		C3C2E7BA167D496D0031B430 /* FingerPositionZ.h in Headers */ = {isa = PBXBuildFile; fileRef = C3C2E7B9167D496D0031B430 /* FingerPositionZ.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		C3EAA989167AD5FE00497E33 /* FingerGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EAA987167AD5FE00497E33 /* FingerGesture.cpp */; };
 		C3EAA98A167AD5FE00497E33 /* FingerGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EAA987167AD5FE00497E33 /* FingerGesture.cpp */; };
@@ -111,7 +110,6 @@
 		C3BF4B7416D053C40091DE62 /* LeapMIDI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeapMIDI.h; sourceTree = "<group>"; };
 		C3BF4B7716D053D90091DE62 /* MIDITypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIDITypes.h; sourceTree = "<group>"; };
 		C3C2E7B2167D45650031B430 /* FingerPositionX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FingerPositionX.h; sourceTree = "<group>"; };
-		C3C2E7B7167D49460031B430 /* FingerPositionY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FingerPositionY.h; sourceTree = "<group>"; };
 		C3C2E7B9167D496D0031B430 /* FingerPositionZ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FingerPositionZ.h; sourceTree = "<group>"; };
 		C3EAA987167AD5FE00497E33 /* FingerGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FingerGesture.cpp; sourceTree = "<group>"; };
 		C3EAA988167AD5FE00497E33 /* FingerGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FingerGesture.h; sourceTree = "<group>"; };
@@ -179,7 +177,6 @@
 				C33EF316166738D3001D3D0E /* contrib */,
 				C3BF4B7416D053C40091DE62 /* LeapMIDI.h */,
 				C3BF4B7716D053D90091DE62 /* MIDITypes.h */,
-				C3C2E7B7167D49460031B430 /* FingerPositionY.h */,
 				C35F6D8316704EAF000CEF49 /* MIDIListener.cpp */,
 				C35F6D8416704EAF000CEF49 /* MIDIListener.h */,
 				C37D33451698F6C000D695C0 /* MIDIProgram.cpp */,
@@ -261,7 +258,6 @@
 				C3EAA991167AD69300497E33 /* FingerPosition.h in Headers */,
 				C3EAA98B167AD5FE00497E33 /* FingerGesture.h in Headers */,
 				C3C2E7B5167D45650031B430 /* FingerPositionX.h in Headers */,
-				C3C2E7B8167D49460031B430 /* FingerPositionY.h in Headers */,
 				C3C2E7BA167D496D0031B430 /* FingerPositionZ.h in Headers */,
 				C35F6DA21671B460000CEF49 /* BallRadius.h in Headers */,
 				6014F91416D08204007B14EF /* MIDIControlProgram.h in Headers */,

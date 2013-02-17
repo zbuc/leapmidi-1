@@ -18,7 +18,7 @@
 
 namespace leapmidi {
     
-    class Control : public virtual MIDIBase {
+class Control : public virtual MIDIBase {
     public:
         // create a recognized control with raw input value from recognizer
         Control(midi_bodypart_index handIndex, midi_bodypart_index fingerIndex, midi_control_value_raw rawValue);
@@ -40,7 +40,7 @@ namespace leapmidi {
         midi_control_value_raw _rawValue;
 };
 
-    typedef std::shared_ptr<Control> ControlPtr;
+typedef std::shared_ptr<Control> ControlPtr;
 
 } // namespace leapmidi
 

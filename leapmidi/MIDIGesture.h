@@ -38,6 +38,9 @@ public:
     
     // given a controller, return MIDI notes recognized from gestures
     virtual void recognizedNotes(const Leap::Controller&, std::vector<NotePtr>&) = 0;
+
+private:
+    std::vector<int> activeNotes;
 };
 
 typedef shared_ptr<Gesture> GesturePtr;
